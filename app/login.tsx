@@ -1,7 +1,8 @@
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { ActivityIndicator, Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import Toast from 'react-native-toast-message';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -11,7 +12,13 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert('Error', 'Por favor ingresa email y contraseña');
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Por favor ingresa email y contraseña',
+        position: 'top',
+        visibilityTime: 3000,
+      });
       return;
     }
 
@@ -23,13 +30,33 @@ export default function LoginScreen() {
       });
 
       if (error) {
-        Alert.alert('Error de login', error.message);
+        Toast.show({
+          type: 'error',
+          text1: 'Error de login',
+          text2: error.message === 'Invalid login credentials' 
+            ? 'Credenciales inválidas' 
+            : error.message,
+          position: 'top',
+          visibilityTime: 4000,
+        });
       } else if (data.user) {
-        Alert.alert('Éxito', '¡Conectado correctamente a Supabase!');
+        Toast.show({
+          type: 'success',
+          text1: '¡Éxito!',
+          text2: 'Conectado correctamente a Supabase',
+          position: 'top',
+          visibilityTime: 2000,
+        });
         router.push('/(tabs)');
       }
     } catch (error) {
-      Alert.alert('Error', 'Hubo un problema al conectar con Supabase');
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Hubo un problema al conectar con Supabase',
+        position: 'top',
+        visibilityTime: 3000,
+      });
       console.error(error);
     } finally {
       setLoading(false);
@@ -38,7 +65,13 @@ export default function LoginScreen() {
 
   const handleSignUp = async () => {
     if (!email || !password) {
-      Alert.alert('Error', 'Por favor ingresa email y contraseña');
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Por favor ingresa email y contraseña',
+        position: 'top',
+        visibilityTime: 3000,
+      });
       return;
     }
 
@@ -50,12 +83,30 @@ export default function LoginScreen() {
       });
 
       if (error) {
-        Alert.alert('Error de registro', error.message);
+        Toast.show({
+          type: 'error',
+          text1: 'Error de registro',
+          text2: error.message,
+          position: 'top',
+          visibilityTime: 4000,
+        });
       } else if (data.user) {
-        Alert.alert('Éxito', 'Cuenta creada. Revisa tu email para confirmar');
+        Toast.show({
+          type: 'success',
+          text1: '¡Cuenta creada!',
+          text2: 'Revisa tu email para confirmar',
+          position: 'top',
+          visibilityTime: 4000,
+        });
       }
     } catch (error) {
-      Alert.alert('Error', 'Hubo un problema al registrar');
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Hubo un problema al registrar',
+        position: 'top',
+        visibilityTime: 3000,
+      });
       console.error(error);
     } finally {
       setLoading(false);
@@ -64,47 +115,49 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>LumbraTech</Text>
-      <Text style={styles.subtitle}>Conéctate a Supabase</Text>
+      <View style={styles.formContainer}>
+        <Text style={styles.title}>LumbraTech</Text>
+        <Text style={styles.subtitle}>Conéctate a Supabase</Text>
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        editable={!loading}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          editable={!loading}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Contraseña"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        editable={!loading}
-      />
+        <TextInput
+          style={styles.input}
+          placeholder="Contraseña"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          editable={!loading}
+        />
 
-      {loading ? (
-        <ActivityIndicator size="large" color="#3b82f6" style={styles.loader} />
-      ) : (
-        <>
-          <TouchableOpacity
-            style={[styles.button, styles.loginButton]}
-            onPress={handleLogin}
-          >
-            <Text style={styles.buttonText}>Iniciar Sesión</Text>
-          </TouchableOpacity>
+        {loading ? (
+          <ActivityIndicator size="large" color="#3b82f6" style={styles.loader} />
+        ) : (
+          <>
+            <TouchableOpacity
+              style={[styles.button, styles.loginButton]}
+              onPress={handleLogin}
+            >
+              <Text style={styles.buttonText}>Iniciar Sesión</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[styles.button, styles.signupButton]}
-            onPress={handleSignUp}
-          >
-            <Text style={styles.buttonText}>Registrarse</Text>
-          </TouchableOpacity>
-        </>
-      )}
+            <TouchableOpacity
+              style={[styles.button, styles.signupButton]}
+              onPress={handleSignUp}
+            >
+              <Text style={styles.buttonText}>Registrarse</Text>
+            </TouchableOpacity>
+          </>
+        )}
+      </View>
     </View>
   );
 }
@@ -112,9 +165,25 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#f5f5f5',
+    padding: 20,
+  },
+  formContainer: {
+    width: '100%',
+    maxWidth: 400,
+    backgroundColor: 'white',
+    padding: 32,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
   },
   title: {
     fontSize: 32,
@@ -135,7 +204,7 @@ const styles = StyleSheet.create({
     padding: 12,
     marginBottom: 15,
     borderRadius: 8,
-    backgroundColor: 'white',
+    backgroundColor: '#f9fafb',
     fontSize: 16,
   },
   button: {
@@ -157,14 +226,5 @@ const styles = StyleSheet.create({
   },
   loader: {
     marginVertical: 20,
-  },
-  info: {
-    marginTop: 20,
-    padding: 12,
-    backgroundColor: '#fef3c7',
-    borderRadius: 8,
-    fontSize: 12,
-    color: '#92400e',
-    textAlign: 'center',
   },
 });
