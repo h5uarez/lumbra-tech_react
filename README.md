@@ -1,50 +1,127 @@
-# Welcome to your Expo app 👋
+# LumbraTech
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplicación móvil desarrollada con Expo Router y React Native, con integración de autenticación en la nube mediante Supabase.
 
-## Get started
+## Estado del Proyecto
 
-1. Install dependencies
+**Base de desarrollo** - Proyecto inicial con:
+- Sistema de autenticación con Supabase
+- Pantalla de login y registro
+- Contexto global de autenticación
+- Navegación por pestañas
+- Listo para implementar nuevas características
 
-   ```bash
-   npm install
-   ```
+## Requisitos
 
-2. Start the app
+- Node.js 18 o superior
+- npm o yarn
+- Expo CLI: `npm install -g expo-cli`
 
-   ```bash
-   npx expo start
-   ```
+## Inicio Rápido
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
+### 1. Instalar Dependencias
 ```bash
-npm run reset-project
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Configurar Variables de Entorno
+Crea un archivo `.env` con tus credenciales de Supabase:
 
-## Learn more
+```env
+EXPO_PUBLIC_SUPABASE_URL=https://tu-proyecto.supabase.co
+EXPO_PUBLIC_SUPABASE_ANON_KEY=tu-anon-key-aqui
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+Referencia: Usa `.env.example` como plantilla.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### 3. Iniciar Servidor de Desarrollo
+```bash
+npm start
+```
 
-## Join the community
+Selecciona la opción apropiada:
+- `w` - Navegador web
+- `a` - Emulador de Android
+- `i` - Simulador de iOS (requiere macOS)
 
-Join our community of developers creating universal apps.
+## Estructura del Proyecto
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```
+app/
+  ├── _layout.tsx              Configuración de rutas y autenticación
+  ├── login.tsx                Pantalla de autenticación
+  ├── modal.tsx                Ejemplo de componente modal
+  └── (tabs)/
+      ├── _layout.tsx          Configuración de navegación por pestañas
+      ├── index.tsx            Pantalla de inicio
+      └── explore.tsx          Pantalla de exploración
+
+contexts/
+  └── auth-context.tsx         Contexto global de autenticación
+
+lib/
+  └── supabase.ts              Cliente de Supabase configurado
+
+components/
+  ├── themed-text.tsx          Componente de texto con tema
+  ├── themed-view.tsx          Componente de vista con tema
+  └── ui/                      Librería de componentes de interfaz
+```
+
+## Autenticación
+
+La aplicación implementa autenticación con Supabase con las siguientes características:
+
+- Login con correo electrónico y contraseña
+- Registro de usuario con confirmación de email
+- Gestión persistente de sesiones
+- Hook personalizado `useAuth()` para acceder al estado de autenticación
+
+### Configurar Usuario de Prueba
+
+1. Accede a tu proyecto en supabase.com
+2. Ve a la sección Authentication > Users
+3. Crea un nuevo usuario con correo electrónico y contraseña
+
+## Dependencias Principales
+
+| Paquete | Propósito |
+|---------|-----------|
+| expo | Framework para desarrollo multiplataforma |
+| expo-router | Sistema de enrutamiento basado en archivos |
+| react-native | Framework nativo para móviles |
+| @supabase/supabase-js | Librería cliente de Supabase |
+| react-navigation | Navegación nativa |
+
+## Scripts Disponibles
+
+| Comando | Descripción |
+|---------|------------|
+| `npm start` | Inicia el servidor de desarrollo |
+| `npm run web` | Ejecuta en navegador web |
+| `npm run android` | Ejecuta en Android |
+| `npm run ios` | Ejecuta en iOS |
+| `npm run lint` | Valida el código |
+| `npm run reset-project` | Reinicia la estructura del proyecto |
+
+## Soporte de Tema
+
+La aplicación se adapta automáticamente al modo claro u oscuro según las preferencias del sistema.
+
+## Documentación
+
+- [Documentación de Expo](https://docs.expo.dev)
+- [Documentación de Supabase](https://supabase.com/docs)
+- [Documentación de React Native](https://reactnative.dev)
+- [Guía de Expo Router](https://docs.expo.dev/router/introduction)
+
+## Consideraciones de Seguridad
+
+- No hagas commit de archivos `.env` con credenciales de producción
+- Las claves públicas se almacenan solo en `.env.example`
+- Las claves de servicio nunca deben exponerse en aplicaciones cliente
+- Todas las credenciales deben gestionarse mediante variables de entorno
+
+## Licencia
+
+Propietario - LumbraTech
